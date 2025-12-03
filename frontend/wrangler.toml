@@ -1,0 +1,6 @@
+name = "code-editor"
+compatibility_date = "2025-05-05"
+
+[assets]
+directory = "./dist/code-editor/browser"
+not_found_handling = "single-page-application"

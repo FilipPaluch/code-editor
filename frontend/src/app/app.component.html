@@ -1,0 +1,45 @@
+<!-- app.component.html -->
+<mat-sidenav-container class="app-container">
+  <mat-sidenav-content>
+    <div class="header">
+      <h1>{{ title }}</h1>
+      <div class="controls">
+        
+        <button mat-raised-button 
+                [class.mat-primary]="showAiChat()"
+                (click)="toggleAiChat()"
+                class="ai-toggle">
+          <mat-icon>{{ showAiChat() ? 'chat_bubble' : 'chat_bubble_outline' }}</mat-icon>
+          {{ showAiChat() ? 'Hide AI' : 'Show AI' }}
+        </button>
+      </div>
+    </div>
+    
+    <div class="content" [class.with-ai]="showAiChat()">
+      @if (showAiChat()) {
+        <div class="ai-panel">
+          <app-ai-chat
+            [currentCode]="expression()"
+            (codeUpdate)="onAiCodeUpdate($event)">
+          </app-ai-chat>
+        </div>
+        
+        <div class="resize-handle" 
+             (mousedown)="onResizeStart($event)">
+        </div>
+      }
+      
+      <div class="editor-panel">
+        <app-expression-editor
+          #expressionEditor
+          [mode]="editorMode()"
+          [expressionFields]="expressionFields"
+          [insideNg]="true"
+          (editorReady)="onEditorReady($event)"
+          (valueChange)="onValueChange($event)">
+        </app-expression-editor>
+      </div>
+    </div>
+    
+  </mat-sidenav-content>
+</mat-sidenav-container>

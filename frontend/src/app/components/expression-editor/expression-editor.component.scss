@@ -1,0 +1,123 @@
+ .editor-container {
+   flex: 1;
+   height: 100%;
+   position: relative;
+
+   ::ng-deep .option-value-hint {
+     color: #505050;
+     font-style: normal;
+     margin-left: 0px;
+     border-radius: 2px;
+     background-color: #f0f0f0;
+     border: 1px solid #e8e8e8;
+     pointer-events: none;
+     user-select: none;
+     font-size: 0.9em;
+     font-family: monospace;
+     white-space: pre;
+     display: inline-block;
+     vertical-align: middle;
+     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+   }
+
+   .validation-errors {
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     background: rgba(255, 200, 200, 0.95);
+     padding: 10px;
+     max-height: 150px;
+     overflow-y: auto;
+     border-top: 1px solid #fcc;
+     font-family: monospace;
+
+     .error {
+       color: #c00;
+       margin: 4px 0;
+     }
+   }
+ }
+
+ .ai-diff-actions {
+   position: absolute;
+   top: 0;
+   right: 0;
+   z-index: 100;
+   background-color: #ffffff;
+   border: 1px solid #e2e8f0;
+   border-radius: 0 0 0 8px;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+   padding: 12px 16px;
+ }
+
+ .ai-diff-actions-inner {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+ }
+
+ .ai-diff-title {
+   font-weight: 500;
+   color: #4a5568;
+   margin-right: 8px;
+ }
+
+ .ai-diff-actions button {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   padding: 8px 16px;
+   border: none;
+   border-radius: 6px;
+   font-size: 14px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+ }
+
+ .accept-btn {
+   background-color: #48bb78;
+   color: white;
+ }
+
+ .accept-btn:hover {
+   background-color: #38a169;
+   transform: translateY(-1px);
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+
+ .reject-btn {
+   background-color: #e2e8f0;
+   color: #4a5568;
+ }
+
+ .reject-btn:hover {
+   background-color: #cbd5e0;
+   transform: translateY(-1px);
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+
+ // Dostosuj style dla diff editora
+ :host ::ng-deep {
+   .monaco-diff-editor {
+     height: 100%;
+   }
+
+   // Zmień kolory dla inline diff view
+   .monaco-diff-editor .line-insert {
+     background-color: rgba(72, 187, 120, 0.2) !important;
+   }
+
+   .monaco-diff-editor .line-delete {
+     background-color: rgba(245, 101, 101, 0.2) !important;
+   }
+
+   .monaco-diff-editor .char-insert {
+     background-color: rgba(72, 187, 120, 0.4) !important;
+   }
+
+   .monaco-diff-editor .char-delete {
+     background-color: rgba(245, 101, 101, 0.4) !important;
+   }
+ }
