@@ -1,16 +1,113 @@
 # Code Editor – Custom DSL Editor Powered by Monaco, ANTLR4 & AI
 
-Code Editor is a fully customizable code editor built on top of Monaco (the engine behind VS Code), enabling the creation and execution of a domain-specific programming language (DSL) **defined using ANTLR4 grammars**.
+A sophisticated, production-ready code editor built on Monaco Editor (VS Code engine) with a custom **ANTLR4-powered language engine**.  
+Create domain-specific languages (DSL) with full IDE-like features including intelligent autocompletion, real-time validation, semantic analysis, and AI-powered code assistance.
 
-The editor provides a full programming experience: intelligent autocompletion, validation, real-time diagnostics, semantic rules, snippets, dropdowns, function hints, and **AI assistance that can generate, validate code and suggest improvements — all with diff-based approval.**
+## 🚀 Key Features
 
----
+- 🔤 **Custom DSL Support** – Define your own programming languages using ANTLR4 grammars  
+- 🧠 **Intelligent IntelliSense** – Context-aware autocompletion with field suggestions
+- ⚡ **Real-time Validation** – Live error detection with precise diagnostics and error recovery  
+- 🔍 **Semantic Analysis** – Deep code understanding  
+- 🤖 **AI Integration** – AI-powered code generation and suggestions with diff-based approval   
+- 📝 **Rich Language Features** – Syntax highlighting, hover tooltips, bracket matching, and code snippets  
+- 🎯 **Domain-Driven** – Configurable input field schemas with dropdown options, collections, and validation rules  
 
-## Demo Videos
+## 📊 Use Cases
+
+- Custom Business Rules Engines  
+- Data Mapping & Transformation Pipelines (ETL/ELT)  
+- No-Code / Low-Code Platforms  
+- Analytics, Reporting & Query Builders  
+
+## 🤖 AI-First – Natural Language to Code
+
+### Overview
+
+The AI integration enables users to write code using natural language descriptions.  
+Instead of learning complex DSL syntax, users can describe their requirements in plain text, and the AI automatically generates the corresponding code, validates it, and suggests improvements.
+
+### How It Works
+
+#### 1. Context-Aware AI Assistant
+
+When a user types a natural language request, the editor automatically provides the AI with complete context about the custom language:
+
+- **Complete ANTLR4 Grammar** – The AI receives the full grammar definition, understanding exactly how expressions, lambda functions, operators, and all language constructs work  
+- **Available Field Schema** – All accessible fields, their types, dropdown options, collection properties, and validation rules  
+- **Current Code Context** – The existing code, cursor position, and surrounding expressions for contextual understanding  
+- **Domain Model** – Business-specific field meanings and relationships  
+
+#### 2. Intelligent Code Generation
+
+The AI leverages this rich context to:
+
+- **Generate Syntactically Correct Code** – Understanding the grammar ensures all generated expressions follow proper DSL syntax rules  
+- **Use Valid Field References** – Only suggests fields that actually exist in the domain schema  
+- **Respect Type Constraints** – Generates appropriate comparisons, operators, and values based on field types  
+- **Handle Complex Logic** – Creates sophisticated lambda expressions, nested conditions, and iterator patterns  
+
+#### 3. Real-Time Validation & Correction
+
+Generated code is immediately validated by the same ANTLR4 engine that powers the editor:
+
+- **Automatic Error Detection** – Any syntax or semantic errors are caught instantly  
+- **AI Self-Correction** – When validation fails, the AI receives detailed error feedback and automatically fixes the code  
+- **Schema Compliance** – Ensures all field references, dropdown values, and data types match the domain model  
+
+## 🗣 Natural Language Examples
+
+### Simple Conditions
+
+- **"Write a condition that returns orders where the status is 'paid'."**  
+  → `order.status = 'paid'`
+
+- **"Create a condition for orders created on 2024-01-15."**  
+  → `order.date = DATE(2024, 1, 15)`
 
 
+### Complex Lambda Expressions
 
----
+- **"Return orders where at least one item has category 'electronics'."**  
+  → `ANY OF order.items IS item -> { item.category = 'electronics' }`
+
+- **"Build a condition for users that own at least one device with OS 'windows'."**  
+  → `ANY OF user.devices IS device -> { device.os = 'windows' }`
+
+
+### Multi-Condition Logic
+
+- **"Select shipped orders that contain at least one item in category 'electronics' with a price over 100."**  
+  →  
+  `order.status = 'shipped' AND ANY OF order.items IS item -> { item.category = 'electronics' AND item.unitPrice > 100 }` 
+
+## 🤖 AI Capabilities
+
+### Code Generation
+
+Transform natural language descriptions into valid DSL expressions, handling complex nested logic and lambda functions automatically.
+
+### Code Validation
+
+Analyze existing code for syntax errors, semantic issues, and domain model violations, providing detailed explanations and fix suggestions.
+
+### Code Optimization
+
+Suggest performance improvements, simplify complex expressions, and recommend best practices for the specific domain.
+
+### Interactive Learning
+
+The AI learns from the specific grammar and field schema, becoming increasingly accurate for domain-specific terminology and patterns.
+
+### Diff-Based Workflow
+
+All AI suggestions are presented through Monaco's built-in diff editor:
+
+- Side-by-side comparison of original and suggested code  
+- Accept/reject workflow with keyboard shortcuts  
+- Partial acceptance of specific changes  
+- Undo capability to revert AI modifications  
+
 ## How the ANTLR4-based engine works
 
 ### Multiple IF/THEN blocks and separate grammars
@@ -72,160 +169,6 @@ This partnership is what allows the editor to provide:
 - precise error messages,  
 - code insights (expected types, allowed fields, lambda variable scopes, etc.),  
 - and AI suggestions with diff previews.
-
-### Condition Grammar (used in all `#IF` blocks)
-
-Below is the complete grammar defining the structure of conditional expressions.  
-It describes boolean operations, comparisons, lambda expressions, iterators, dates, numbers, arrays, and more.
-
-```antlr
-grammar Conditions;
-
-exp
- : expression EOF
- ;
-
-expression
- : bool                                                   #boolx 
- | LPAREN expression RPAREN                               #parenx
- | NOT expression                                         #notx
- | left=equatable op=equality right=equatable             #equalityx
- | left=expression op=equality right=expression           #expressionsequalityx
- | left=comparable op=comparator right=comparable         #comparatorx
- | left=expression op=binary right=expression             #binaryx
- | equatable IS IDENTIFIER LAMBDAARROW LLAMBDAPAREN expression RLAMBDAPAREN
-                                                          #lambdax
- ;
-
-number
- : LPAREN number RPAREN                                   #parensx
- | a=number POWER b=number                                #powerx
- | MINUS number                                           #negationx
- | a=number op=(MULTIPLICATION | DIVISION) b=number       #multiplicationx
- | a=number op=(PLUS | MINUS) b=number                    #additionx
- | iterator                                               #numberIteratorx
- | identifier                                             #numberIdentifierx
- | DECIMAL                                                #decimalx
- ;
-
-date
- : DATE LPAREN year=number COMMA month=number COMMA day=number RPAREN
-                                                          #dateConstructorx
- | iterator                                               #dateIteratorx
- | identifier                                             #dateIdentifierx
- | TEXT                                                   #dateTextx
- ;
-
-string
- : iterator              #iteratorStringx
- | TEXT                  #textStringx
- | identifier            #identifierStringx
- | UNFINISHED_STRING     #unfinishedStringx
- ;
-
-equatable
- : bool | comparable
- ;
-
-equality
- : EQ | NEQ
- ;
-
-binary
- : AND | OR
- ;
-
-comparable
- : iterator 
- | number 
- | date 
- | identifier
- | TEXT 
- | UNFINISHED_STRING
- ;
-
-iterator
- : (ANY | ALL) OF (array | identifier)
- ;
-
-comparator
- : GT | GE | LT | LE
- ;
- 
-array
- : LARRAYPAREN arrayelements? RARRAYPAREN
- ;
-
-arrayelements
- : textarrayelement ( COMMA textarrayelement)* 
- | decimalarrayelement ( COMMA decimalarrayelement)*
- ;
-
-textarrayelement
- : identifier
- | TEXT
- ;
-
-decimalarrayelement
- : decimalConst 
- | identifier
- ;
-
-identifier
- : IDENTIFIER
- | identifier COLON IDENTIFIER
- ;
-
-bool
- : TRUE | FALSE
- ;
-
-decimalConst
- : DECIMAL
- | MINUS DECIMAL
- ;
-
-DATE            : [Dd][Aa][Tt][Ee] ;
-
-IS              : [Ii][Ss] ;
-OF              : [Oo][Ff] ;
-ANY             : [Aa][Nn][Yy] ;
-ALL             : [Aa][Ll][Ll] ;
-AND             : [Aa][Nn][Dd] ;
-OR              : [Oo][Rr] ;
-NOT             : [Nn][Oo][Tt];
-TRUE            : [Tt][Rr][Uu][Ee] ;
-FALSE           : [Ff][Aa][Ll][Ss][Ee] ;
-
-POWER           : '^' ;
-MULTIPLICATION  : '*' ;
-DIVISION        : '/' ;
-PLUS            : '+' ;
-MINUS           : '-' ;
-GT              : '>' ;
-GE              : '>=' ;
-LT              : '<' ;
-LE              : '<=' ;
-EQ              : '=' ;
-NEQ             : '!=' ;
-LPAREN          : '(' ;
-RPAREN          : ')' ;
-LARRAYPAREN     : '[' ;
-RARRAYPAREN     : ']' ;
-LLAMBDAPAREN    : '{' ;
-RLAMBDAPAREN    : '}' ;
-LAMBDAARROW     : '->' ;
-COLON           : ':' ;
-COMMA           : ',' ;
-DECIMAL         : [0-9]+ ( '.' [0-9]+ )? ;
-UNFINISHED_STRING : ['] [a-zA-Z_0-9 \\|^{}~/$:.,%()*?!#&+[\]@-]* ;
-TEXT            : ['][a-zA-Z_0-9 \\|^{}~/$:.,%()*?!#&+[\]@-]*['] ;
-IDENTIFIER      : [a-zA-Z_.] [a-zA-Z_.0-9]* ;
-WS              : [ \r\t\u000C\n]+ -> skip;
-ERROR_CHAR      : . ;
-```
-
----
 
 ## From text to semantic model
 
