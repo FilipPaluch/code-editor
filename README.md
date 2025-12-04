@@ -1,9 +1,18 @@
-# Code Editor – Custom DSL Editor Powered by Monaco, ANTLR4 & AI
+# AI Code Editor – Custom DSL Editor Powered by AI, Monaco & ANTLR4
 
 🔗 **Live Demo:** https://code-editor.fpaluch92.workers.dev/
 
 A sophisticated, production-ready code editor built on Monaco Editor (VS Code engine) with a custom **ANTLR4-powered language engine**.  
 Create domain-specific languages (DSL) with full IDE-like features including intelligent autocompletion, real-time validation, semantic analysis, and AI-powered code assistance.
+
+## 🤖 AI-First
+
+https://github.com/user-attachments/assets/0d82621f-cdfe-4828-8949-17dd6cd71ea7
+
+## 📝 Traditional way
+
+https://github.com/user-attachments/assets/ea9cb418-b299-4fd7-b8f8-d7160c516ca6
+
 
 ## 🚀 Key Features
 
